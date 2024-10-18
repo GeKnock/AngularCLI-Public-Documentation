@@ -1,5 +1,7 @@
 # Краткая документация Angular CLI (по книге)
 
+## Глава 1. Основные моменты. Создание и подготовка проекта Angular
+
 ### <u>Создание проекта Angular</u>
 
 ```bat
@@ -159,7 +161,75 @@ platformBrowserDynamic().bootstrapModule(AppModule);
 
 ### Принцип работы приложения Angular
 
->Браузер выполнил код из файла начальной загрузки; это привело к активизации среды Angular, которая, в свою очередь, обработала документ HTML и обнаружила элемент todo-app. Свойство selector, использованное для определения компонента, совпадает с элементом todo-app, вследствие чего Angular удаляет временный контент и зменяет его шаблоном компонента, автоматически загружаемым из файла app.component.html. В ходе разбора шаблона обнаруживается конструкция привязки {{ }}; содержащееся в ней выражение вычисляется, вызывается метод getName и выводится результат
+> Браузер выполнил код из файла начальной загрузки; это привело к активизации среды Angular, которая, в свою очередь, обработала документ HTML и обнаружила элемент todo-app. Свойство selector, использованное для определения компонента, совпадает с элементом todo-app, вследствие чего Angular удаляет временный контент и зменяет его шаблоном компонента, автоматически загружаемым из файла app.component.html. В ходе разбора шаблона обнаруживается конструкция привязки {{ }}; содержащееся в ней выражение вычисляется, вызывается метод getName и выводится результат
 
 <hr>
 
+## Глава 2. Расширение функционала приложения Angular
+
+### Добавление таблицы
+
+Файл app.component.ts (Представление)
+
+```typescript
+import { Component } from "@angular/core";
+import { Model } from "./model";
+@Component({
+selector: "todo-app",
+templateUrl: "app/app.component.html"
+})
+export class AppComponent {
+model = new Model();
+    getName() {
+        return this.model.user;
+    }
+    getTodoItems() {
+        return this.model.items;
+    }
+}
+```
+
+Файл app.component.html (Шаблон)
+
+```angular17html
+<h3 class="bg-primary p-a-1">{{getName()}}'s To Do List</h3>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr><th></th><th>Description</th><th>Done</th></tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of getTodoItems(); let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.action }}</td>
+            <td [ngSwitch]="item.done">
+                <span *ngSwitchCase="true">Yes</span>
+                <span *ngSwitchDefault>No</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+```
+
+Файл app.component.model.ts (Модель данных)
+
+```typescript
+export class Model {
+    user;
+    items;
+    constructor() {
+        this.user = "Adam";
+        this.items = [new TodoItem("Buy Flowers", false),
+        new TodoItem("Get Shoes", false),
+        new TodoItem("Collect Tickets", false),
+        new TodoItem("Call Joe", false)]
+    }
+}
+export class TodoItem {
+    action;
+    done;
+    constructor(action, done) {
+        this.action = action;
+        this.done = done;
+    }
+}
+```
