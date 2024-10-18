@@ -2,24 +2,21 @@
 
 ## Глава 1. Основные моменты. Создание и подготовка проекта Angular
 
-### <u>Создание проекта Angular</u>
+### Создание проекта Angular
 
 ```bat
 ng new <имя проекта>
 ```
 
 <i><u>Примечание:</u> <b><имя проекта></b> - новая папка с приложением Angular</i>
-<hr>
 
-### <u>Установка плагинов из package.json</u>
+### Установка плагинов из package.json
 
 ```bat
 npm install
 ```
 
-<hr>
-
-### <u>Запуск сервера / Запуск сервера на конкретном порту</u>
+### Запуск сервера / Запуск сервера на конкретном порту
 
 ```bat
 npm serve --open
@@ -29,16 +26,12 @@ npm serve --open
 npm serve --port 3300 --open
 ```
 
-<hr>
-
-### <u>Подключение к index.html встроенного модуля Bootstrap</u>
+### Подключение к index.html встроенного модуля Bootstrap
 
 ```html
 
 <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
 ```
-
-<hr>
 
 <blockquote style="color: rgba(255,162,162,0.8)">! В приложениях Angular данные отделяются от способа их представления для пользователя. Это один из ключевых принципов паттерна MVC</blockquote>
 
@@ -50,8 +43,6 @@ npm serve --port 3300 --open
 Но полезность TypeScript также в значительной мере обусловлена и тем, что TypeScript берет код, использующий новейшие
 возможности языка JavaScript, в код, который будет работать везде — даже в браузерах, не поддерживающих эту
 функциональность.
-
-<hr>
 
 ### Модель данных (MVC)
 
@@ -96,8 +87,6 @@ export class TodoItem {
 
 <blockquote style="color: rgba(255,162,162,0.8)">! Ключевое слово <b>export</b> относится к работе с модулями JavaScript. При использовании модулей каждый файл TypeScript или JavaScript считается автономным блоком функциональности, а ключевое слово export идентифицирует данные и типы, которые должны использоваться в других местах приложения. Модули JavaScript используются для управления зависимостями между файлами проекта, а также для того, чтобы разработчику не приходилось вручную управлять сложным набором элементов script в файле HTML.</blockquote>
 
-<hr>
-
 ### Привязка данных в шаблоне (Шаблонизатор)
 
 ```angular17html
@@ -105,8 +94,6 @@ export class TodoItem {
 ```
 
 > Пример: ```<h3 class="bg-primary p-a-1">{{getName()}}'s To Do List</h3>```
-
-<hr>
 
 ### Компонент Angular
 
@@ -128,8 +115,6 @@ export class AppComponent {
     }
 }
 ```
-
-<hr>
 
 ### Корневой модуль
 
@@ -186,23 +171,20 @@ platformBrowserDynamic().bootstrapModule(AppModule);
 
 <blockquote style="color: rgba(255,162,162,0.8)">Вызов метода platformBrowserDynamic().bootstrapModule предназначен для браузерных приложений</blockquote>
 
-<hr>
-
 ### Принцип работы приложения Angular
 
 > Браузер выполнил код из файла начальной загрузки; это привело к активизации среды Angular, которая, в свою очередь,
 > обработала документ HTML и обнаружила элемент todo-app. Свойство selector, использованное для определения компонента,
 > совпадает с элементом todo-app, вследствие чего Angular удаляет временный контент и зменяет его шаблоном компонента,
-> автоматически загружаемым из файла app.component.html. В ходе разбора шаблона обнаруживается конструкция привязки {{ }};
+> автоматически загружаемым из файла app.component.html. В ходе разбора шаблона обнаруживается конструкция
+> привязки {{ }};
 > содержащееся в ней выражение вычисляется, вызывается метод getName и выводится результат
-
-<hr>
 
 ## Глава 2. Расширение функционала приложения Angular
 
 ### Добавление таблицы
 
-Файл app.component.ts (Представление). Добавление функции getTodoItems()
+Файл app.component.ts (Представление). <br>Добавление функции getTodoItems()
 
 ```typescript
 import {Component} from "@angular/core";
@@ -225,7 +207,8 @@ export class AppComponent {
 }
 ```
 
-Файл app.component.html (Шаблон). Добавление таблицы table. Добавление односторонней привязки данных. Добавление шаблонных выражений ngFor, ngSwitch
+Файл app.component.html (Шаблон). <br>Добавление таблицы table. Добавление односторонней привязки данных. Добавление
+шаблонных выражений ngFor, ngSwitch
 
 ```html
 <h3 class="bg-primary p-a-1">{{getName()}}'s To Do List</h3>
@@ -279,7 +262,7 @@ export class TodoItem {
 
 ### Добавление двусторонней привязи данных
 
-Файл app.component.html (Шаблон). Добавление ngModel
+Файл app.component.html (Шаблон). <br>Добавление ngModel
 
 ```html
 <h3 class="bg-primary p-a-1">{{ getName() }}'s To Do List</h3>
@@ -303,4 +286,58 @@ export class TodoItem {
     </tr>
     </tbody>
 </table>
+```
+
+### Добавление функциональности приложения. Фильтрация задач
+
+Файл app.component.ts. <br>Добавление <i>лямбда</i> функции filter()
+
+```typescript
+import {Component} from "@angular/core";
+import {Model} from "./model";
+
+@Component({
+    selector: "todo-app",
+    templateUrl: "app.component.html"
+})
+export class AppComponent {
+    model = new Model();
+
+    getName() {
+        return this.model.user;
+    }
+
+    getTodoItems() {
+        return this.model.items.filter(item => !item.done);
+    }
+}
+```
+
+### Добавление задач
+
+Файл app.component.html. <br>Добавление переменной элемента input <i>"#"</i> и функцию обработки значения при нажатии (click) = (...)
+
+```html
+....
+<div class="m-t-1 m-b-1">
+    <input class="form-control" #todoText/>
+    <button class="btn btn-primary m-t-1" (click)="addItem(todoText.value)">
+        Add
+    </button>
+</div>
+....
+```
+
+Файл app.component.ts. <br>Импорт данных и модели. Добавление функции addItem()
+
+```typescript
+...
+import { Model, TodoItem } from "./model";
+...
+addItem(newItem) {
+    if (newItem != "") {
+        this.model.items.push(new TodoItem(newItem, false));
+    }
+}
+...
 ```
