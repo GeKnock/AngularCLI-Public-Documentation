@@ -191,7 +191,7 @@ model = new Model();
 
 Файл app.component.html (Шаблон)
 
-```angular17html
+```html
 <h3 class="bg-primary p-a-1">{{getName()}}'s To Do List</h3>
 <table class="table table-striped table-bordered">
     <thead>
